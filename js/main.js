@@ -1,4 +1,4 @@
-//? primera consigna
+
 
 function calcularPrecioConDescuento(precioOriginal, porcentajeDescuento) {
     if (precioOriginal < 0 || porcentajeDescuento < 0 || porcentajeDescuento > 100) {
@@ -15,7 +15,6 @@ let porcentajeDescuento = parseFloat(prompt("Ingresa el porcentaje de descuento:
 
 console.log(calcularPrecioConDescuento(precioOriginal, porcentajeDescuento));
 
-//? segunda consigna
 
 let saldo = 1000000;
 
