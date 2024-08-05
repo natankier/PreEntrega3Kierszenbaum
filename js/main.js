@@ -1,109 +1,127 @@
+let saldo = parseFloat(localStorage.getItem('saldo')) || 1000;
 
-
-function calcularPrecioConDescuento(precioOriginal, porcentajeDescuento) {
-    if (precioOriginal < 0 || porcentajeDescuento < 0 || porcentajeDescuento > 100  ||  isNaN(cantidad)) {
-        return "Error: Ingresa valores válidos.";
-    }
-    
-    let descuento = precioOriginal * (porcentajeDescuento / 100);
-    let precioFinal = precioOriginal - descuento;
-    return `El precio final de $${precioOriginal} con ${porcentajeDescuento}% de descuento es: $${precioFinal}`;
-}
-
-let precioOriginal = parseFloat(prompt("Ingresa el precio original del producto: "));
-let porcentajeDescuento = parseFloat(prompt("Ingresa el porcentaje de descuento: "));
-
-console.log(calcularPrecioConDescuento(precioOriginal, porcentajeDescuento));
-
-
-
-let saldo = 1000000;
-
-// Función para consultar saldo
-function consultarSaldo() {
-    return `Tu saldo actual es de $${saldo}`;
-}
-
-// Función para depositar cantidad
-function depositarCantidad(cantidad) {
-    if (isNaN(cantidad) || cantidad <= 0) {
-        return "Error: Ingresa una cantidad válida para depositar.";
-    }
-    saldo += cantidad;
-    return `Se depositaron en la cuenta $${cantidad}. Tu saldo actual es de $${saldo}`;
-}
-
-// Función para extraer cantidad
-function extraerCantidad(cantidad) {
-    if (isNaN(cantidad) || cantidad <= 0) {
-        return "Error: Ingresa una cantidad válida para retirar.";
-    }
-    if (cantidad > saldo) {
-        return `Saldo insuficiente en la cuenta`;
-    } else {
-        saldo -= cantidad;
-        return `Retiraste $${cantidad}. Tu saldo actual es de: $${saldo}`;
+class Producto {
+    constructor(id, nombre, precio) {
+        this.id = id;
+        this.nombre = nombre;
+        this.precio = precio;
     }
 }
 
-// Array de objetos para almacenar información del simulador (ejemplo: productos)
-let productos = [
-    { id: 1, nombre: 'Iphone 13 Pro Max', precio: 999 },
-    { id: 2, nombre: 'Iphone 14 Pro Max', precio: 1199 },
-    { id: 3, nombre: 'Iphone 15 Pro Max', precio: 1399 }
+const productos = JSON.parse(localStorage.getItem('productos')) || [
+    new Producto(1, 'Iphone 13 Pro Max', 999),
+    new Producto(2, 'Iphone 14 Pro Max', 1199),
+    new Producto(3, 'Iphone 15 Pro Max', 1399)
 ];
 
-// Función para mostrar productos
+function actualizarSaldo() {
+    document.getElementById('saldo').innerText = `Tu saldo actual es: $${saldo}`;
+}
+
 function mostrarProductos() {
-    let mensaje = 'Productos disponibles:\n';
+    const lista = document.getElementById('lista-productos');
+    lista.innerHTML = '';
     productos.forEach(producto => {
-        mensaje += `${producto.id}. ${producto.nombre} - $${producto.precio}\n`;
+        const item = document.createElement('li');
+        item.textContent = `${producto.nombre} - $${producto.precio}`;
+        lista.appendChild(item);
     });
-    return mensaje;
 }
 
-// Función para buscar producto por nombre
-function buscarProducto(nombre) {
-    let productoEncontrado = productos.find(producto => producto.nombre.toLowerCase() === nombre.toLowerCase());
-    return productoEncontrado ? `Producto encontrado: ${productoEncontrado.nombre} - $${productoEncontrado.precio}` : 'Producto no encontrado';
+function guardarDatos() {
+    localStorage.setItem('saldo', saldo);
+    localStorage.setItem('productos', JSON.stringify(productos));
 }
 
-// Función principal del cajero automático
-function cajeroAutomatico() {
-    while (true) {
-        let mensaje = "Bienvenido al cajero automático\n1. Consultar saldo\n2. Depositar dinero\n3. Retirar dinero\n4. Ver productos\n5. Buscar producto\n6. Salir";
-        let opcion = parseInt(prompt(mensaje + "\nSelecciona una opción: "));
+function crearInterface() {
+    const app = document.getElementById('app');
+    const template = `
+        <h1>Cajero y Tienda Virtual</h1>
+        <div class="container" id="saldo-section">
+            <h2>Saldo</h2>
+            <p id="saldo">Tu saldo actual es: $${saldo}</p>
+        </div>
+        <div class="container" id="acciones-bancarias">
+            <h2>Acciones Bancarias</h2>
+            <input type="number" id="monto" placeholder="Monto">
+            <button id="depositar">Depositar</button>
+            <button id="retirar">Retirar</button>
+        </div>
+        <div class="container" id="productos-section">
+            <h2>Productos</h2>
+            <ul id="lista-productos"></ul>
+            <input type="text" id="nombreProducto" placeholder="Buscar producto por nombre">
+            <button id="buscarProducto">Buscar Producto</button>
+            <button id="comprarProducto">Comprar Producto</button>
+        </div>
+        <div id="resultado"></div>
+        <div id="mensaje-agradecimiento"></div>
+    `;
+    app.innerHTML = template;
+    mostrarProductos();
+    actualizarSaldo();
 
-        if (isNaN(opcion) || opcion < 1 || opcion > 6) {
-            alert("Opción no válida. Por favor, selecciona una opción válida.");
-            continue;
-        }
+    document.getElementById('depositar').addEventListener('click', depositar);
+    document.getElementById('retirar').addEventListener('click', retirar);
+    document.getElementById('buscarProducto').addEventListener('click', buscarProducto);
+    document.getElementById('comprarProducto').addEventListener('click', comprarProducto);
+}
 
-        switch (opcion) {
-            case 1:
-                alert(consultarSaldo());
-                break;
-            case 2:
-                let cantidadDepositar = parseFloat(prompt("Ingresa la cantidad a depositar: "));
-                alert(depositarCantidad(cantidadDepositar));
-                break;
-            case 3:
-                let cantidadRetirar = parseFloat(prompt("Ingresa la cantidad a retirar: "));
-                alert(extraerCantidad(cantidadRetirar));
-                break;
-            case 4:
-                alert(mostrarProductos());
-                break;
-            case 5:
-                let nombreProducto = prompt("Ingresa el nombre del producto a buscar: ");
-                alert(buscarProducto(nombreProducto));
-                break;
-            case 6:
-                alert("Gracias por utilizar el cajero automático.");
-                return;
-        }
+function depositar() {
+    const monto = parseFloat(document.getElementById('monto').value);
+    const resultado = document.getElementById('resultado');
+    if (!isNaN(monto) && monto > 0) {
+        saldo += monto;
+        actualizarSaldo();
+        resultado.innerText = `Se depositaron $${monto}. Tu saldo actual es de $${saldo}.`;
+        guardarDatos();
+    } else {
+        resultado.innerText = 'Por favor, ingresa un monto válido.';
     }
 }
 
-// Iniciar el cajero automático
-cajeroAutomatico();
+function retirar() {
+    const monto = parseFloat(document.getElementById('monto').value);
+    const resultado = document.getElementById('resultado');
+    if (!isNaN(monto) && monto > 0 && monto <= saldo) {
+        saldo -= monto;
+        actualizarSaldo();
+        resultado.innerText = `Has retirado $${monto}. Tu saldo actual es de $${saldo}.`;
+        guardarDatos();
+    } else {
+        resultado.innerText = 'Por favor, ingresa un monto válido o verifica tu saldo.';
+    }
+}
+
+function buscarProducto() {
+    const nombre = document.getElementById('nombreProducto').value.toLowerCase();
+    const resultado = document.getElementById('resultado');
+    const producto = productos.find(p => p.nombre.toLowerCase().includes(nombre));
+    resultado.innerText = producto
+        ? `Producto encontrado: ${producto.nombre} - $${producto.precio}`
+        : 'Producto no encontrado.';
+}
+
+function comprarProducto() {
+    const nombre = document.getElementById('nombreProducto').value.toLowerCase();
+    const resultado = document.getElementById('resultado');
+    const mensajeAgradecimiento = document.getElementById('mensaje-agradecimiento');
+    const producto = productos.find(p => p.nombre.toLowerCase() === nombre);
+    if (producto) {
+        if (saldo >= producto.precio) {
+            saldo -= producto.precio;
+            actualizarSaldo();
+            resultado.innerText = `Has comprado ${producto.nombre} por $${producto.precio}.`;
+            mensajeAgradecimiento.innerText = 'Gracias por comprar con nosotros.';
+            guardarDatos();
+        } else {
+            resultado.innerText = 'Saldo insuficiente para comprar este producto.';
+            mensajeAgradecimiento.innerText = '';
+        }
+    } else {
+        resultado.innerText = 'Producto no encontrado.';
+        mensajeAgradecimiento.innerText = '';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', crearInterface);
