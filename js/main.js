@@ -117,6 +117,11 @@ function eliminarDelCarrito(index) {
 
 // Función para vaciar el carrito
 function vaciarCarrito() {
+    if (carrito.length === 0) {
+        mostrarMensajeError('El carrito ya está vacío.'); // Mostrar mensaje si el carrito ya está vacío
+        return;
+    }
+
     carrito = [];
     actualizarCarrito();
 }
@@ -163,6 +168,11 @@ function mostrarMensajeExito(mensaje) {
 
 // Función para manejar la compra del carrito
 function comprarCarrito() {
+    if (carrito.length === 0) {
+        mostrarMensajeError('El carrito está vacío. Añade productos al carrito antes de comprar.');
+        return;
+    }
+
     const totalCarrito = carrito.reduce((acc, item) => acc + item.precio, 0);
 
     if (totalCarrito > saldo) {
