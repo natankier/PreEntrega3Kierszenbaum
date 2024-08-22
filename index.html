@@ -3,11 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cajero y Tienda Virtual</title>
+    <title>Compra directa</title>
     <link rel="stylesheet" href="./Style/styles.css">
+    <link rel="stylesheet" href="./Style/header.css">
+    <link rel="stylesheet" href="./Style/footer.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="./js/main.js" defer></script>
 </head>
 <body>
-    <div id="app"></div>
-    <script src="./js/main.js"></script>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <img src="./images/logocd.png" alt="logo pagina" id="logoPagina">
+            <h1>Compra directa</h1>
+            <nav>
+                <ul>
+                    <li><a href="#saldo-section">Saldo</a></li>
+                    <li><a href="#productos-section">Productos</a></li>
+                    <li><a href="#carrito">Carrito</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="app">
+
+        <div id="productos-section" class="container">
+            <h2>Productos</h2>
+            <div class="card-container"></div>
+        </div>
+        
+        <div id="saldo-section" class="container">
+            <h2>Saldo</h2>
+            <p id="saldo">Tu saldo actual es: $0</p>
+        </div>
+
+        <div id="acciones-bancarias" class="container">
+            <h2>Acciones Bancarias</h2>
+            <input type="number" id="monto" placeholder="Monto">
+            <button id="depositar">Depositar</button>
+            <button id="retirar">Retirar</button>
+            <p id="resultado"></p> <!-- Mensaje de error o éxito -->
+        </div>
+
+        <div id="carrito" class="container">
+            <h2>Carrito de Compras</h2>
+            <ul id="lista-carrito"></ul>
+            <p id="total-carrito">Total: $0</p>
+            <button id="vaciar-carrito" class="botonCarrito">Vaciar Carrito</button>
+            <button id="comprar-carrito" class="botonCarrito">Comprar</button> <!-- Botón para comprar -->
+        </div>
+
+        <template id="producto-template">
+            <div class="card">
+                <img src="{{imagen}}" alt="">
+                <h3>{{nombre}}</h3>
+                <p>{{precio}}</p>
+                <button class="agregar-carrito">Agregar al Carrito</button>
+            </div>
+        </template>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Tu Tienda Virtual. Todos los derechos reservados.</p>
+            <nav>
+                <ul>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 </body>
 </html>

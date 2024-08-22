@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
 }
 
 #app {
@@ -10,10 +11,13 @@ body {
     padding: 20px;
 }
 
-h1, h2 {
+h2 {
     text-align: center;
 }
 
+#cajero{
+background-color:rgb(224, 217, 207) ;
+}
 
 .container {
     margin: 20px 0;
@@ -28,4 +32,56 @@ input, button {
 
 button {
     cursor: pointer;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    width: 30%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow:  5px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    text-align: center;
+    padding: 10px;
+}
+
+.card img {
+    width: 30%;
+    height: auto;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Mueve el card hacia arriba */
+}
+
+
+.agregar-carrito{
+    background-color: rgb(224, 217, 207);
+    border-radius: 7px;
+}
+.agregar-carrito:hover {
+    background-color: antiquewhite;
+}
+
+#carrito {
+    background-color: rgb(224, 217, 207);
+    border-radius: 5px;
+}
+
+#lista-carrito {
+list-style-type: none;
+}
+
+.botonCarrito {
+    margin-top: 20px;
+    background-color: rgb(224, 217, 207);
+    border-radius: 7px;
 }
